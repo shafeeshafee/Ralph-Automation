@@ -32,7 +32,7 @@ scrape_configs:
     scheme: 'http'
     scrape_timeout: 10s
     static_configs:
-      - targets: ['ap-alb-1787224191.us-east-1.elb.amazonaws.com:8080']
+      - targets: ['app-alb-1787224191.us-east-1.elb.amazonaws.com:8080']
     relabel_configs:
       - source_labels: [__address__]
         target_label: instance
