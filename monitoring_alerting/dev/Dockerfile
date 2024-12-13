@@ -10,9 +10,11 @@ RUN apt-get update && apt-get install -y \
 
 # Install AWS CLI
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
-    && unzip awscliv2.zip
+    && unzip awscliv2.zip \
+    && ./aws/install \
+    && rm -rf aws awscliv2.zip
 
-WORKDIR /agent
+WORKDIR /app
 
 # Copy requirements first for better caching
 COPY shared/requirements.txt ./requirements.txt
@@ -23,11 +25,13 @@ RUN pip install --no-cache-dir pydantic==1.10.8 \
     && pip install --no-cache-dir -r requirements.txt \
     && pip install prometheus_client requests boto3
 
-# Copy the rest of the application
+# Copy the shared code
 COPY shared/ ./shared/
+
+# Copy the specific agent code based on AGENT_NAME
 COPY agent/${AGENT_NAME}/main.py ./main.py
 
-# If this is the analytics agent, copy the analysis script
+# Make sure the script is executable
 RUN if [ "$AGENT_NAME" = "analytics" ]; then \
     mkdir -p ./scripts && \
     touch ./scripts/analyze_findings.sh && \
