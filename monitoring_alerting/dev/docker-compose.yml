@@ -37,12 +37,12 @@ services:
       - grafana-storage:/var/lib/grafana
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
       - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
-      - ./grafana/email-grafana.ini:/etc/grafana/grafana.ini:ro
+
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
-      - GF_INSTALL_PLUGINS=grafana-oncall-app
+
     ports:
       - "3000:3000"
     networks:
@@ -54,6 +54,7 @@ services:
     image: prom/node-exporter:v1.6.0
     command:
       - '--path.rootfs=/host'
+      - '--web.listen-address=:9100'
     network_mode: host
     pid: host
     restart: unless-stopped
@@ -70,6 +71,35 @@ services:
       - /dev/disk/:/dev/disk:ro
     ports:
       - "8080:8080"
+    networks:
+      - monitoring
+    restart: unless-stopped
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+
+
+  host_node_exporter:
+    image: prom/node-exporter:v1.6.0
+    command:
+      - '--path.rootfs=/host'
+      - '--web.listen-address=:9101'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - /:/host:ro,rslave
+
+  host_cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    ports:
+      - "8082:8080"
     networks:
       - monitoring
     restart: unless-stopped

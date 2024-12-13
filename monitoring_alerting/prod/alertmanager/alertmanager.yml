@@ -1,19 +1,19 @@
 global:
-  smtp_smarthost: 'smtp.gmail.com:587'  # SMTP server and port
-  smtp_from: 'your-email@gmail.com'    # The email sending the alerts
-  smtp_auth_username: 'cgordon.dev@gmail.com'  # Email username
-  smtp_auth_password: 'your-email-password'  # Email password or App Password
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'cloudega.alertmanager@gmail.com'
+  smtp_auth_username: "cloudega.alertmanager@gmail.com"
+  smtp_auth_password: "icqlbopubfbxxgcs"
   smtp_require_tls: true
 
 route:
   receiver: 'email-team'
-  group_by: ['alertname']  # Group alerts by 'alertname'
-  group_wait: 30s          # Wait 30s before sending alerts
-  group_interval: 5m       # Send new alerts every 5m if not resolved
-  repeat_interval: 1h      # Resend ongoing alerts every 1h
+  group_by: ['alertname']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 1h
 
 receivers:
 - name: 'email-team'
   email_configs:
-  - to: 'cgordon.dev@gmail.com,another-team-email@example.com'
-    send_resolved: true  # Include resolved alerts
+  - to: 'cgordon.dev@gmail.com'
+    send_resolved: true

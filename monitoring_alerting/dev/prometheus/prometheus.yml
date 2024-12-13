@@ -6,7 +6,7 @@ alerting:
   alertmanagers:
     - static_configs:
         - targets:
-          - alertmanager:9093
+            - alertmanager:9093
 
 rule_files:
   - "/etc/prometheus/alerting_rules.yml"
@@ -16,32 +16,37 @@ scrape_configs:
     static_configs:
       - targets: ['prometheus:9090']
 
-  - job_name: 'node_exporter'
+  - job_name: 'app_node_exporter'
     metrics_path: '/metrics'
     scheme: 'http'
     scrape_timeout: 10s
-    scrape_interval: 15s
     static_configs:
-      - targets: ['app-alb-1651614373.us-east-1.elb.amazonaws.com:9100']
+      - targets: ['app-alb-1787224191.us-east-1.elb.amazonaws.com:9100']
     relabel_configs:
       - source_labels: [__address__]
         target_label: instance
         replacement: '${1}'
 
-
-  - job_name: 'cadvisor'
+  - job_name: 'app_cadvisor'
     metrics_path: '/metrics'
     scheme: 'http'
-    scrape_interval: 15s
     scrape_timeout: 10s
     static_configs:
-      - targets: ['app-alb-1651614373.us-east-1.elb.amazonaws.com:8080']
+      - targets: ['ap-alb-1787224191.us-east-1.elb.amazonaws.com:8080']
     relabel_configs:
       - source_labels: [__address__]
         target_label: instance
         replacement: '${1}'
-
 
   - job_name: 'pushgateway'
     static_configs:
       - targets: ['pushgateway:9091']
+
+  - job_name: 'host_node_exporter'
+    static_configs:
+      - targets: ['172.31.34.90:9101']
+
+  - job_name: 'host_cadvisor'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['172.31.34.90:8082']
