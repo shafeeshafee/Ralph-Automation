@@ -23,34 +23,24 @@ MIN_FORECAST_ROWS = int(os.getenv('MIN_FORECAST_ROWS', '2'))  # Minimum rows req
 # List of Metrics for Forecasting
 FORECAST_METRICS = [
     # CPU Metrics
-    'node_cpu_seconds_total',
-    'node_load1',
-    'node_load5',
-    'node_load15',
+    'node_cpu_seconds_total',               # Total CPU time
+    'node_cpu_utilization_ratio',           # CPU utilization ratio (if derived from Prometheus)
 
     # Memory Metrics
-    'node_memory_MemTotal_bytes',
-    'node_memory_MemAvailable_bytes',
-    'node_memory_Cached_bytes',
-    'node_memory_Buffers_bytes',
+    'node_memory_MemAvailable_bytes',       # Available memory
+    'node_memory_Cached_bytes',             # Cached memory
+    'node_memory_Buffers_bytes',            # Memory used for buffers
 
-    # Disk Metrics
-    'node_disk_read_bytes_total',
-    'node_disk_written_bytes_total',
-    'node_disk_io_time_seconds_total',
+    # Disk I/O Metrics
+    'node_disk_read_bytes_total',           # Total bytes read from disk
+    'node_disk_written_bytes_total',        # Total bytes written to disk
+    'node_disk_io_time_seconds_total',      # Time spent on disk I/O
 
     # Network Metrics
-    'node_network_receive_bytes_total',
-    'node_network_transmit_bytes_total',
-
-    # Process and Application Metrics
-    'process_cpu_seconds_total',
-    'process_resident_memory_bytes',
-    'go_gc_duration_seconds',
-    'go_goroutines',
-
-    # Additional Metrics
-    'node_nf_conntrack_entries'
+    'node_network_receive_bytes_total',     # Total bytes received
+    'node_network_transmit_bytes_total',    # Total bytes transmitted
+    'node_network_receive_errs_total',      # Total receive errors
+    'node_network_transmit_errs_total',     # Total transmit errors
 ]
 
 def fetch_prometheus_data(query, start_time, end_time, step):
@@ -77,58 +67,107 @@ def fetch_prometheus_data(query, start_time, end_time, step):
 def forecast_timeseries(df, horizon_minutes=60, min_rows=2):
     """
     Use Prophet to forecast the next 'horizon_minutes' minutes.
+    Returns both the last actual value and the predicted value.
     """
     if df.empty or df.shape[0] < min_rows:
-        logging.warning(f"Dataframe has {df.shape[0]} rows, which is less than the required {min_rows}. Returning neutral prediction.")
-        return 0.5
+        logging.warning(f"Dataframe has {df.shape[0]} rows, which is less than the required {min_rows}")
+        return None, None
+
     try:
+        # Get the last actual value
+        last_actual = df['y'].iloc[-1]
+
+        # Fit Prophet model and make prediction
         m = Prophet(daily_seasonality=False, weekly_seasonality=False, yearly_seasonality=False)
         m.fit(df)
-        future = m.make_future_dataframe(periods=horizon_minutes, freq='T')  # Minute-level forecast
+        future = m.make_future_dataframe(periods=horizon_minutes, freq='T')
         forecast = m.predict(future)
-        return forecast.iloc[-1]['yhat']
+        predicted = forecast.iloc[-1]['yhat']
+
+        return last_actual, predicted
+
     except Exception as e:
         logging.exception("Error during forecasting with Prophet")
-        return 0.5
+        return None, None
 
-def push_forecast(predicted_usage, labels):
+def push_metrics(metric_name, actual_value, predicted_value, labels):
     """
-    Push the forecasted usage to the Pushgateway with appropriate labels.
+    Push both actual and predicted metrics to Pushgateway with appropriate labels.
     """
     try:
         registry = CollectorRegistry()
-        g = Gauge('predicted_usage', 'Forecasted usage by ML model', labelnames=labels.keys(), registry=registry)
-        g.labels(**labels).set(predicted_usage)
-        push_to_gateway(PUSHGATEWAY_URL, job='ml_forecast', registry=registry)
-        logging.info(f"Pushed predicted usage {predicted_usage} with labels {labels}")
+
+        # Create gauges for actual and predicted values
+        actual_gauge = Gauge(f'{metric_name}_actual', 
+                           f'Actual value for {metric_name}',
+                           labelnames=labels.keys(),
+                           registry=registry)
+        
+        predicted_gauge = Gauge(f'{metric_name}_predicted', 
+                              f'Predicted value for {metric_name}',
+                              labelnames=labels.keys(),
+                              registry=registry)
+
+        # Push both metrics with their labels
+        if actual_value is not None:
+            actual_gauge.labels(**labels).set(actual_value)
+        if predicted_value is not None:
+            predicted_gauge.labels(**labels).set(predicted_value)
+
+        # Push to gateway with a unique job name for each metric
+        push_to_gateway(PUSHGATEWAY_URL, 
+                       job=f'ml_forecast_{metric_name}',
+                       registry=registry)
+
+        logging.info(f"Pushed metrics for {metric_name}: actual={actual_value}, predicted={predicted_value}")
+
     except Exception as e:
-        logging.exception("Error pushing forecast to Pushgateway")
+        logging.exception(f"Error pushing metrics to Pushgateway for {metric_name}")
+
+def process_metric(metric_name, metric_data):
+    """
+    Process a single metric's data and push results to Prometheus.
+    """
+    values = metric_data['values']
+    metric_labels = metric_data.get('metric', {})
+    
+    # Convert timestamps to datetime
+    df = pd.DataFrame(values, columns=['ds', 'y'])
+    df['ds'] = pd.to_datetime(df['ds'], unit='s')
+    df['y'] = pd.to_numeric(df['y'], errors='coerce').fillna(0)
+
+    # Get actual and predicted values
+    actual, predicted = forecast_timeseries(df, 
+                                          horizon_minutes=HORIZON, 
+                                          min_rows=MIN_FORECAST_ROWS)
+
+    # Prepare labels
+    labels = {k: v for k, v in metric_labels.items() if k != '__name__'}
+    labels['metric'] = metric_name
+
+    # Push metrics
+    push_metrics(metric_name, actual, predicted, labels)
 
 def main():
     """
-    Main function to iterate over all forecasting metrics, perform forecasting, and push results.
+    Main function to process metrics and push both actual and predicted values.
     """
     end_time = int(time.time())
     start_time = end_time - LOOKBACK_SECONDS
 
     for metric in FORECAST_METRICS:
-        logging.info(f"Processing metric for forecasting: {metric}")
+        logging.info(f"Processing metric: {metric}")
         results = fetch_prometheus_data(metric, start_time, end_time, STEP)
 
         if not results:
-            push_forecast(0.5, {'metric': metric})
+            logging.warning(f"No data found for metric: {metric}")
             continue
 
         for ts in results:
-            values = ts['values']
-            metric_labels = ts.get('metric', {})
-            # Convert timestamps to datetime
-            df = pd.DataFrame(values, columns=['ds', 'y'])
-            df['ds'] = pd.to_datetime(df['ds'], unit='s')
-            df['y'] = pd.to_numeric(df['y'], errors='coerce').fillna(0)
+            process_metric(metric, ts)
 
-            predicted = forecast_timeseries(df, horizon_minutes=HORIZON, min_rows=MIN_FORECAST_ROWS)
-            push_forecast(predicted, metric_labels)
+        # Sleep briefly to avoid overwhelming the Pushgateway
+        time.sleep(0.1)
 
 if __name__ == "__main__":
     main()

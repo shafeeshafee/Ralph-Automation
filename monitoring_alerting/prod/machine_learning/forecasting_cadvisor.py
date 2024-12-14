@@ -1,3 +1,4 @@
+# forecasting_cadvisor.py
 import os
 import time
 import logging
@@ -23,28 +24,22 @@ MIN_FORECAST_ROWS = int(os.getenv('MIN_FORECAST_ROWS', '2'))  # Minimum rows req
 CADVISOR_METRICS = [
     # CPU Metrics
     'container_cpu_usage_seconds_total',  # Total CPU time consumed
-    'container_cpu_cfs_periods_total',  # Total CFS (Completely Fair Scheduler) periods
+    'container_cpu_cfs_periods_total',  # Total CFS periods
     'container_cpu_cfs_throttled_periods_total',  # CFS throttled periods
 
     # Memory Metrics
     'container_memory_usage_bytes',  # Memory usage by container
-    'container_memory_working_set_bytes',  # Memory minus cache, used actively
+    'container_memory_working_set_bytes',  # Memory actively used
     'container_memory_cache',  # Cache memory usage
 
     # Disk I/O Metrics
-    'container_fs_reads_bytes_total',  # Total bytes read from filesystem
-    'container_fs_writes_bytes_total',  # Total bytes written to filesystem
+    'container_fs_reads_bytes_total',  # Total bytes read
+    'container_fs_writes_bytes_total',  # Total bytes written
     'container_fs_usage_bytes',  # Total disk space used
 
     # Network Metrics
     'container_network_receive_bytes_total',  # Total bytes received
     'container_network_transmit_bytes_total',  # Total bytes transmitted
-    'container_network_receive_packets_total',  # Total packets received
-    'container_network_transmit_packets_total',  # Total packets transmitted
-
-    # Additional Metrics
-    'container_processes',  # Number of active processes in container
-    'container_start_time_seconds',  # Start time of container
 ]
 
 def fetch_prometheus_data(query, start_time, end_time, step):
@@ -71,58 +66,113 @@ def fetch_prometheus_data(query, start_time, end_time, step):
 def forecast_timeseries(df, horizon_minutes=60, min_rows=2):
     """
     Use Prophet to forecast the next 'horizon_minutes' minutes.
+    Returns both the last actual value and the predicted value.
     """
     if df.empty or df.shape[0] < min_rows:
-        logging.warning(f"Dataframe has {df.shape[0]} rows, which is less than the required {min_rows}. Returning neutral prediction.")
-        return 0.5
+        logging.warning(f"Dataframe has {df.shape[0]} rows, which is less than the required {min_rows}")
+        return None, None
+
     try:
+        # Get the last actual value
+        last_actual = df['y'].iloc[-1]
+
+        # Fit Prophet model and make prediction
         m = Prophet(daily_seasonality=False, weekly_seasonality=False, yearly_seasonality=False)
         m.fit(df)
-        future = m.make_future_dataframe(periods=horizon_minutes, freq='T')  # Minute-level forecast
+        future = m.make_future_dataframe(periods=horizon_minutes, freq='T')
         forecast = m.predict(future)
-        return forecast.iloc[-1]['yhat']
+        predicted = forecast.iloc[-1]['yhat']
+
+        return last_actual, predicted
+
     except Exception as e:
         logging.exception("Error during forecasting with Prophet")
-        return 0.5
+        return None, None
 
-def push_forecast(predicted_usage, labels):
+def push_container_metrics(metric_name, actual_value, predicted_value, labels):
     """
-    Push the forecasted usage to the Pushgateway with appropriate labels.
+    Push both actual and predicted container metrics to Pushgateway with appropriate labels.
     """
     try:
         registry = CollectorRegistry()
-        g = Gauge('predicted_usage', 'Forecasted usage by ML model', labelnames=labels.keys(), registry=registry)
-        g.labels(**labels).set(predicted_usage)
-        push_to_gateway(PUSHGATEWAY_URL, job='cadvisor_forecast', registry=registry)
-        logging.info(f"Pushed predicted usage {predicted_usage} with labels {labels}")
+
+        # Create gauges for actual and predicted values with container-specific naming
+        actual_gauge = Gauge(f'{metric_name}_actual', 
+                           f'Actual container value for {metric_name}',
+                           labelnames=labels.keys(),
+                           registry=registry)
+        
+        predicted_gauge = Gauge(f'{metric_name}_predicted', 
+                              f'Predicted container value for {metric_name}',
+                              labelnames=labels.keys(),
+                              registry=registry)
+
+        # Push both metrics with their labels
+        if actual_value is not None:
+            actual_gauge.labels(**labels).set(actual_value)
+        if predicted_value is not None:
+            predicted_gauge.labels(**labels).set(predicted_value)
+
+        # Push to gateway with a unique job name for each container metric
+        push_to_gateway(PUSHGATEWAY_URL, 
+                       job=f'cadvisor_forecast_{metric_name}',
+                       registry=registry)
+
+        logging.info(f"Pushed container metrics for {metric_name}: actual={actual_value}, predicted={predicted_value}")
+
     except Exception as e:
-        logging.exception("Error pushing forecast to Pushgateway")
+        logging.exception(f"Error pushing container metrics to Pushgateway for {metric_name}")
+
+def process_container_metric(metric_name, metric_data):
+    """
+    Process a single container metric's data and push results to Prometheus.
+    """
+    values = metric_data['values']
+    metric_labels = metric_data.get('metric', {})
+    
+    # Convert timestamps to datetime
+    df = pd.DataFrame(values, columns=['ds', 'y'])
+    df['ds'] = pd.to_datetime(df['ds'], unit='s')
+    df['y'] = pd.to_numeric(df['y'], errors='coerce').fillna(0)
+
+    # Get actual and predicted values
+    actual, predicted = forecast_timeseries(df, 
+                                          horizon_minutes=HORIZON, 
+                                          min_rows=MIN_FORECAST_ROWS)
+
+    # Prepare labels while preserving container-specific information
+    labels = {k: v for k, v in metric_labels.items() if k != '__name__'}
+    labels['metric'] = metric_name
+
+    # Ensure container name is always present in labels
+    if 'container_name' not in labels and 'container' in labels:
+        labels['container_name'] = labels['container']
+    elif 'container_name' not in labels:
+        labels['container_name'] = 'unknown'
+
+    # Push metrics
+    push_container_metrics(metric_name, actual, predicted, labels)
 
 def main():
     """
-    Main function to iterate over all cAdvisor metrics, perform forecasting, and push results.
+    Main function to process container metrics and push both actual and predicted values.
     """
     end_time = int(time.time())
     start_time = end_time - LOOKBACK_SECONDS
 
     for metric in CADVISOR_METRICS:
-        logging.info(f"Processing metric for forecasting: {metric}")
+        logging.info(f"Processing container metric: {metric}")
         results = fetch_prometheus_data(metric, start_time, end_time, STEP)
 
         if not results:
-            push_forecast(0.5, {'metric': metric})
+            logging.warning(f"No data found for container metric: {metric}")
             continue
 
         for ts in results:
-            values = ts['values']
-            metric_labels = ts.get('metric', {})
-            # Convert timestamps to datetime
-            df = pd.DataFrame(values, columns=['ds', 'y'])
-            df['ds'] = pd.to_datetime(df['ds'], unit='s')
-            df['y'] = pd.to_numeric(df['y'], errors='coerce').fillna(0)
+            process_container_metric(metric, ts)
 
-            predicted = forecast_timeseries(df, horizon_minutes=HORIZON, min_rows=MIN_FORECAST_ROWS)
-            push_forecast(predicted, metric_labels)
+        # Sleep briefly to avoid overwhelming the Pushgateway
+        time.sleep(0.1)
 
 if __name__ == "__main__":
     main()
