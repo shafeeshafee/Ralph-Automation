@@ -11,7 +11,6 @@ route:
 receivers:
   - name: 'slack-notifier'
     slack_configs:
-      - api_url: 'https://REMOVED_SECRET'
         channel: '#all-cloudega-test-alerts'
         send_resolved: true
         title: '{{ .CommonAnnotations.summary }}'
