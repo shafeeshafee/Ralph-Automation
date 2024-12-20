@@ -1,0 +1,33 @@
+# /etc/prometheus/rules/alert_rules_ml.yml
+groups:
+  - name: ml_alerts
+    rules:
+    - alert: ModelPredictionDeviation
+      expr: abs(ml_forecast_value - actual_value) / actual_value * 100 > 25
+      for: 15m
+      labels:
+        severity: warning
+        team: data_science
+      annotations:
+        summary: "ML model predictions deviating significantly"
+        description: "Prediction error exceeds 25% threshold for 15 minutes"
+
+    - alert: AnomalyDetectionSpike
+      expr: rate(ml_anomaly_count[5m]) > 10
+      for: 5m
+      labels:
+        severity: warning
+        team: data_science
+      annotations:
+        summary: "High number of anomalies detected"
+        description: "More than 10 anomalies detected in the last 5 minutes"
+
+    - alert: ModelTrainingFailure
+      expr: ml_model_training_status != 1
+      for: 1h
+      labels:
+        severity: critical
+        team: data_science
+      annotations:
+        summary: "ML model training failed"
+        description: "Model training has failed or is incomplete"

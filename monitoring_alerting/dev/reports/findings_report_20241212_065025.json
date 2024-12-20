@@ -1,0 +1,27 @@
+{
+  "timestamp": "20241212_065025",
+  "analytics": {
+    "summary": {
+      "total_files": 5,
+      "total_errors": 2,
+      "total_warnings": 1
+    }
+  },
+  "monitoring": {
+    "node_metrics": {
+      "error": "HTTPConnectionPool(host='prometheus', port=9090): Max retries exceeded with url: /api/v1/query?query=node_memory_MemAvailable_bytes (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x711569f7a7f0>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution'))"
+    },
+    "container_metrics": {
+      "error": "HTTPConnectionPool(host='prometheus', port=9090): Max retries exceeded with url: /api/v1/query?query=container_memory_usage_bytes (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x711569f7a880>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution'))"
+    },
+    "up_status": {
+      "error": "HTTPConnectionPool(host='prometheus', port=9090): Max retries exceeded with url: /api/v1/query?query=up (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x711569f7a7c0>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution'))"
+    },
+    "cadvisor_metrics": {
+      "error": "HTTPConnectionPool(host='prometheus', port=9090): Max retries exceeded with url: /api/v1/query?query=container_cpu_usage_seconds_total (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x711569f7a7f0>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution'))"
+    },
+    "anomaly_scores": {
+      "error": "HTTPConnectionPool(host='prometheus', port=9090): Max retries exceeded with url: /api/v1/query?query=anomaly_score%7Bmetric%3D%22container_cpu_usage_seconds_total%22%7D+%3E+0.8 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x711569f7a970>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution'))"
+    }
+  }
+}

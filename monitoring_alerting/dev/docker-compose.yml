@@ -1,0 +1,276 @@
+version: '3.8'
+
+services:
+  prometheus-v2:
+    image: prom/prometheus:v2.49.0
+    container_name: prometheus-v2
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/alerting_rules.yml:/etc/prometheus/alerting_rules.yml:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.retention.time=15d'
+      - '--web.enable-lifecycle'
+    ports:
+      - "9090:9090"
+    networks:
+      - monitoring-v2
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--tries=1", "http://localhost:9090/-/healthy", "-O", "/dev/null"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  alertmanager-v2:
+    image: prom/alertmanager:v0.26.0
+    container_name: alertmanager-v2
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+    ports:
+      - "9093:9093"
+    networks:
+      - monitoring-v2
+    depends_on:
+      - prometheus-v2
+
+  grafana-v2:
+    image: grafana/grafana:latest
+    container_name: grafana-v2
+    volumes:
+      - grafana-storage-v2:/var/lib/grafana
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./grafana/dashboards:/etc/grafana/dashboards:ro
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring-v2
+    depends_on:
+      - prometheus-v2
+
+  node-exporter-v2:
+    image: prom/node-exporter:v1.6.0
+    container_name: node-exporter-v2
+    command:
+      - '--path.rootfs=/host'
+      - '--web.listen-address=:9100'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - /:/host:ro,rslave
+
+  cadvisor-v2:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor-v2
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    ports:
+      - "8080:8080"
+    networks:
+      - monitoring-v2
+    restart: unless-stopped
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+
+  pushgateway-v2:
+    image: prom/pushgateway:latest
+    container_name: pushgateway-v2
+    ports:
+      - "9091:9091"
+    networks:
+      - monitoring-v2
+    restart: unless-stopped
+
+  machine-learning-v2:
+    image: cgordondev/machine_learning:latest
+    container_name: machine-learning-v2
+    environment:
+      - PROMETHEUS_URL=http://prometheus-v2:9090
+      - PUSHGATEWAY_URL=http://pushgateway-v2:9091
+      - FORECAST_LOOKBACK=86400
+      - FORECAST_STEP=60s
+      - FORECAST_HORIZON=60
+      - ANOMALY_CONTAMINATION=0.01
+      - ANOMALY_LOOKBACK=3600
+    networks:
+      - monitoring-v2
+    depends_on:
+      - prometheus-v2
+      - pushgateway-v2
+    restart: unless-stopped
+
+  log-analytics-agent-v2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        AGENT_NAME: log-analytics
+    container_name: log-analytics-agent-v2
+    volumes:
+      - ./agent/logs:/app/logs:rw
+      - ./agent/reports:/app/reports:rw
+      - ./shared:/app/shared:ro
+    networks:
+      - monitoring-v2
+    environment:
+      - PYTHONPATH=/app
+      - PROMETHEUS_URL=http://prometheus-v2:9090
+      - PUSHGATEWAY_URL=http://pushgateway-v2:9091
+      - REPORTS_DIR=/app/reports
+    depends_on:
+      - prometheus-v2
+      - pushgateway-v2
+    restart: unless-stopped
+
+  monitoring-agent-v2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        AGENT_NAME: monitoring
+    container_name: monitoring-agent-v2
+    volumes:
+      - ./agent/reports:/app/reports:rw
+      - ./shared:/app/shared:ro
+    environment:
+      - PYTHONPATH=/app
+      - PROMETHEUS_URL=http://prometheus-v2:9090
+      - PUSHGATEWAY_URL=http://pushgateway-v2:9091
+      - REPORTS_DIR=/app/reports
+    networks:
+      - monitoring-v2
+    depends_on:
+      - prometheus-v2
+      - pushgateway-v2
+    restart: unless-stopped
+
+  analytics-agent-v2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        AGENT_NAME: analytics
+    container_name: analytics-agent-v2
+    volumes:
+      - ./agent/scripts:/app/scripts:rw
+      - ./agent/reports:/app/reports:rw
+      - ./agent/logs:/app/logs:rw
+      - ./shared:/app/shared:ro
+    networks:
+      - monitoring-v2
+    environment:
+      - PYTHONPATH=/app
+      - PROMETHEUS_URL=http://prometheus-v2:9090
+      - PUSHGATEWAY_URL=http://pushgateway-v2:9091
+      - REPORTS_DIR=/app/reports
+    depends_on:
+      - prometheus-v2
+      - log-analytics-agent-v2
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /app/scripts/analyze_findings.sh && echo OK || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  reporting-agent-v2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        AGENT_NAME: reporting
+    container_name: reporting-agent-v2
+    volumes:
+      - ./agent/reports:/app/reports:rw
+      - ./shared:/app/shared:ro
+    environment:
+      - PYTHONPATH=/app
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION}
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME}
+      - REPORTS_DIR=/app/reports
+    networks:
+      - monitoring-v2
+    depends_on:
+      - log-analytics-agent-v2
+      - monitoring-agent-v2
+      - analytics-agent-v2
+    restart: unless-stopped
+
+  metric-archival-agent-v2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        AGENT_NAME: metric-archival
+    container_name: metric-archival-agent-v2
+    volumes:
+      - ./shared:/app/shared:ro
+    environment:
+      - PYTHONPATH=/app
+      - PROMETHEUS_URL=http://prometheus-v2:9090
+      - PUSHGATEWAY_URL=http://pushgateway-v2:9091
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION}
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME}
+      - ARCHIVE_INTERVAL_MINUTES=60
+      - METRICS_RETENTION_DAYS=30
+      - COMPRESSION_LEVEL=6
+    networks:
+      - monitoring-v2
+    depends_on:
+      - prometheus-v2
+      - pushgateway-v2
+    restart: unless-stopped
+
+  websocket-server-v2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        AGENT_NAME: websocket
+    container_name: websocket-server-v2
+    volumes:
+      - ./agent/reports:/app/reports:rw
+      - ./agent/logs:/app/logs:rw
+      - ./shared:/app/shared:ro
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+      - LOG_LEVEL=INFO
+      - PROMETHEUS_URL=http://prometheus-v2:9090
+      - PUSHGATEWAY_URL=http://pushgateway-v2:9091
+      - REPORTS_DIR=/app/reports
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION}
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    networks:
+      - monitoring-v2
+    depends_on:
+      - prometheus-v2
+      - pushgateway-v2
+    restart: unless-stopped
+
+networks:
+  monitoring-v2:
+    driver: bridge
+
+volumes:
+  grafana-storage-v2:

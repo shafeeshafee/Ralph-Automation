@@ -1,0 +1,1453 @@
+{
+  "timestamp": "20241212_071458",
+  "analytics": {
+    "summary": {
+      "total_files": 5,
+      "total_errors": 2,
+      "total_warnings": 1
+    }
+  },
+  "monitoring": {
+    "node_metrics": {
+      "status": "success",
+      "data": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {
+              "__name__": "node_memory_MemAvailable_bytes",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:9100",
+              "job": "node_exporter"
+            },
+            "value": [
+              1733987693.826,
+              "3145379840"
+            ]
+          }
+        ]
+      }
+    },
+    "container_metrics": {
+      "status": "success",
+      "data": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "container_label_authors": "Allegro.pl Sp. z o.o. and Contributors opensource@allegro.pl",
+              "container_label_com_docker_compose_config_hash": "10b73c7c342d130dd311089497e7cb666dbba3b2997387705e3cd591e06b1323",
+              "container_label_com_docker_compose_container_number": "1",
+              "container_label_com_docker_compose_image": "sha256:f8e89f6f681538f7f50cd2b5d63c2f440fac871ba4cf7f26ef6257ed17c9e2b8",
+              "container_label_com_docker_compose_oneoff": "False",
+              "container_label_com_docker_compose_project": "ubuntu",
+              "container_label_com_docker_compose_project_config_files": "/home/ubuntu/docker-compose.yml",
+              "container_label_com_docker_compose_project_working_dir": "/home/ubuntu",
+              "container_label_com_docker_compose_service": "nginx",
+              "container_label_com_docker_compose_version": "2.31.0",
+              "container_label_description": "Static files for Ralph DCIM served by Nginx HTTP server.",
+              "container_label_maintainer": "Allegro.pl Sp. z o.o. opensource@allegro.pl",
+              "container_label_version": "20241211.1",
+              "id": "/system.slice/docker-1dbc25e1b37d1e9b2e974df3fd619ab0867eb4fc7f30a3b976140029084c9e04.scope",
+              "image": "allegro/ralph-static-nginx:latest",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor",
+              "name": "ubuntu-nginx-1"
+            },
+            "value": [
+              1733987693.829,
+              "3366912"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "container_label_authors": "Allegro.pl Sp. z o.o. and Contributors opensource@allegro.pl",
+              "container_label_com_docker_compose_config_hash": "10b73c7c342d130dd311089497e7cb666dbba3b2997387705e3cd591e06b1323",
+              "container_label_com_docker_compose_container_number": "1",
+              "container_label_com_docker_compose_image": "sha256:f8e89f6f681538f7f50cd2b5d63c2f440fac871ba4cf7f26ef6257ed17c9e2b8",
+              "container_label_com_docker_compose_oneoff": "False",
+              "container_label_com_docker_compose_project": "ubuntu",
+              "container_label_com_docker_compose_project_config_files": "/home/ubuntu/docker-compose.yml",
+              "container_label_com_docker_compose_project_working_dir": "/home/ubuntu",
+              "container_label_com_docker_compose_service": "nginx",
+              "container_label_com_docker_compose_version": "2.31.0",
+              "container_label_description": "Static files for Ralph DCIM served by Nginx HTTP server.",
+              "container_label_maintainer": "Allegro.pl Sp. z o.o. opensource@allegro.pl",
+              "container_label_version": "20241211.1",
+              "id": "/system.slice/docker-cb66fd94c6f238cfe6fc99c977c86bba8f55d906bad314f0dc8a067321313acf.scope",
+              "image": "allegro/ralph-static-nginx:latest",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor",
+              "name": "ubuntu-nginx-1"
+            },
+            "value": [
+              1733987693.829,
+              "3395584"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "container_label_authors": "Allegro.pl Sp. z o.o. and Contributors opensource@allegro.pl",
+              "container_label_com_docker_compose_config_hash": "efd36a4dec5d78ba15ecc3bed39574e5beebf33eb407409c5dc83316f1166710",
+              "container_label_com_docker_compose_container_number": "1",
+              "container_label_com_docker_compose_image": "sha256:01d8d8392bf9eeaa1f253dbd4020b9ac0b102ab56f5ca638c0f553afc2806516",
+              "container_label_com_docker_compose_oneoff": "False",
+              "container_label_com_docker_compose_project": "ubuntu",
+              "container_label_com_docker_compose_project_config_files": "/home/ubuntu/docker-compose.yml",
+              "container_label_com_docker_compose_project_working_dir": "/home/ubuntu",
+              "container_label_com_docker_compose_service": "web",
+              "container_label_com_docker_compose_version": "2.31.0",
+              "container_label_description": "Advanced Asset Management and DCIM system for data center and back office.",
+              "container_label_maintainer": "Allegro.pl Sp. z o.o. opensource@allegro.pl",
+              "container_label_org_opencontainers_image_ref_name": "ubuntu",
+              "container_label_org_opencontainers_image_version": "18.04",
+              "container_label_version": "20241211.1",
+              "id": "/system.slice/docker-a33624b38c7c478a3b9e617d863ceb8f5ad64ee09af31c76aaa2b0c0a00a4e96.scope",
+              "image": "allegro/ralph:latest",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor",
+              "name": "ubuntu-web-1"
+            },
+            "value": [
+              1733987693.829,
+              "219500544"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "container_label_authors": "Allegro.pl Sp. z o.o. and Contributors opensource@allegro.pl",
+              "container_label_com_docker_compose_config_hash": "efd36a4dec5d78ba15ecc3bed39574e5beebf33eb407409c5dc83316f1166710",
+              "container_label_com_docker_compose_container_number": "1",
+              "container_label_com_docker_compose_image": "sha256:01d8d8392bf9eeaa1f253dbd4020b9ac0b102ab56f5ca638c0f553afc2806516",
+              "container_label_com_docker_compose_oneoff": "False",
+              "container_label_com_docker_compose_project": "ubuntu",
+              "container_label_com_docker_compose_project_config_files": "/home/ubuntu/docker-compose.yml",
+              "container_label_com_docker_compose_project_working_dir": "/home/ubuntu",
+              "container_label_com_docker_compose_service": "web",
+              "container_label_com_docker_compose_version": "2.31.0",
+              "container_label_description": "Advanced Asset Management and DCIM system for data center and back office.",
+              "container_label_maintainer": "Allegro.pl Sp. z o.o. opensource@allegro.pl",
+              "container_label_org_opencontainers_image_ref_name": "ubuntu",
+              "container_label_org_opencontainers_image_version": "18.04",
+              "container_label_version": "20241211.1",
+              "id": "/system.slice/docker-f50fa10041130d6a3ec2b1557bd99534c0d050d9d884376a18e70886c6328ae7.scope",
+              "image": "allegro/ralph:latest",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor",
+              "name": "ubuntu-web-1"
+            },
+            "value": [
+              1733987693.829,
+              "219811840"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "container_label_com_docker_compose_config_hash": "32faa895ec4488b46cd9a67a6c7b93e43872f511878c82e83d25fdbaff4eae99",
+              "container_label_com_docker_compose_container_number": "1",
+              "container_label_com_docker_compose_image": "sha256:c02cf39d3dba9fcf5531f23358e33377e50fcc6065d97a27e68a4242229c67a0",
+              "container_label_com_docker_compose_oneoff": "False",
+              "container_label_com_docker_compose_project": "ubuntu",
+              "container_label_com_docker_compose_project_config_files": "/home/ubuntu/docker-compose.yml",
+              "container_label_com_docker_compose_project_working_dir": "/home/ubuntu",
+              "container_label_com_docker_compose_service": "cadvisor",
+              "container_label_com_docker_compose_version": "2.31.0",
+              "id": "/system.slice/docker-438ffa29dd3ae45a7a14e91ca526b7bf0dd478634b4c0bf8f41614e6bf2b2dde.scope",
+              "image": "gcr.io/cadvisor/cadvisor:latest",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor",
+              "name": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "40300544"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "container_label_com_docker_compose_config_hash": "32faa895ec4488b46cd9a67a6c7b93e43872f511878c82e83d25fdbaff4eae99",
+              "container_label_com_docker_compose_container_number": "1",
+              "container_label_com_docker_compose_image": "sha256:c02cf39d3dba9fcf5531f23358e33377e50fcc6065d97a27e68a4242229c67a0",
+              "container_label_com_docker_compose_oneoff": "False",
+              "container_label_com_docker_compose_project": "ubuntu",
+              "container_label_com_docker_compose_project_config_files": "/home/ubuntu/docker-compose.yml",
+              "container_label_com_docker_compose_project_working_dir": "/home/ubuntu",
+              "container_label_com_docker_compose_service": "cadvisor",
+              "container_label_com_docker_compose_version": "2.31.0",
+              "id": "/system.slice/docker-d512f26b55b1742ca336975208dee25eccb380b8869df4d4064333d181fdfb90.scope",
+              "image": "gcr.io/cadvisor/cadvisor:latest",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor",
+              "name": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "40738816"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "3029688320"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/init.scope",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "6520832"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "3202797568"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/ModemManager.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "2375680"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/acpid.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "303104"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/chrony.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "1871872"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/cloud-final.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "871227392"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/cloud-init.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "5242880"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/containerd.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "31481856"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/cron.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "499712"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/dbus.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "1507328"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/docker.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "1145819136"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/docker.socket",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "0"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/fwupd.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "6037504"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/irqbalance.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "557056"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/lxd-installer.socket",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "0"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/multipathd.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "19247104"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/networkd-dispatcher.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "12808192"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/node_exporter.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "9166848"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/polkit.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "1474560"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/rsyslog.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "3678208"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/snap.amazon-ssm-agent.amazon-ssm-agent.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "27324416"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/snapd.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "42700800"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/snapd.socket",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "0"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/ssh.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "3203072"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/ssh.socket",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "8192"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/system-getty.slice",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "245760"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/system-getty.slice/getty@tty1.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "237568"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/system-modprobe.slice",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "8192"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/system-serial\\x2dgetty.slice",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "315392"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/system-serial\\x2dgetty.slice/serial-getty@ttyS0.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "307200"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/system-systemd\\x2dfsck.slice",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "106496"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/systemd-journald.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "12632064"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/systemd-logind.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "1921024"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/systemd-networkd.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "3424256"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/systemd-resolved.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "7593984"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/systemd-udevd.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "12423168"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/systemd-udevd.service/udev",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "0"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/udisks2.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "2736128"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/system.slice/unattended-upgrades.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "9961472"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_memory_usage_bytes",
+              "id": "/user.slice",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.829,
+              "47570944"
+            ]
+          }
+        ]
+      }
+    },
+    "up_status": {
+      "status": "success",
+      "data": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {
+              "__name__": "up",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.837,
+              "1"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "up",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:9100",
+              "job": "node_exporter"
+            },
+            "value": [
+              1733987693.837,
+              "1"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "up",
+              "instance": "prometheus:9090",
+              "job": "prometheus"
+            },
+            "value": [
+              1733987693.837,
+              "1"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "up",
+              "instance": "pushgateway:9091",
+              "job": "pushgateway"
+            },
+            "value": [
+              1733987693.837,
+              "1"
+            ]
+          }
+        ]
+      }
+    },
+    "cadvisor_metrics": {
+      "status": "success",
+      "data": {
+        "resultType": "vector",
+        "result": [
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "container_label_authors": "Allegro.pl Sp. z o.o. and Contributors opensource@allegro.pl",
+              "container_label_com_docker_compose_config_hash": "10b73c7c342d130dd311089497e7cb666dbba3b2997387705e3cd591e06b1323",
+              "container_label_com_docker_compose_container_number": "1",
+              "container_label_com_docker_compose_image": "sha256:f8e89f6f681538f7f50cd2b5d63c2f440fac871ba4cf7f26ef6257ed17c9e2b8",
+              "container_label_com_docker_compose_oneoff": "False",
+              "container_label_com_docker_compose_project": "ubuntu",
+              "container_label_com_docker_compose_project_config_files": "/home/ubuntu/docker-compose.yml",
+              "container_label_com_docker_compose_project_working_dir": "/home/ubuntu",
+              "container_label_com_docker_compose_service": "nginx",
+              "container_label_com_docker_compose_version": "2.31.0",
+              "container_label_description": "Static files for Ralph DCIM served by Nginx HTTP server.",
+              "container_label_maintainer": "Allegro.pl Sp. z o.o. opensource@allegro.pl",
+              "container_label_version": "20241211.1",
+              "cpu": "total",
+              "id": "/system.slice/docker-1dbc25e1b37d1e9b2e974df3fd619ab0867eb4fc7f30a3b976140029084c9e04.scope",
+              "image": "allegro/ralph-static-nginx:latest",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor",
+              "name": "ubuntu-nginx-1"
+            },
+            "value": [
+              1733987693.84,
+              "0.890081"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "container_label_authors": "Allegro.pl Sp. z o.o. and Contributors opensource@allegro.pl",
+              "container_label_com_docker_compose_config_hash": "10b73c7c342d130dd311089497e7cb666dbba3b2997387705e3cd591e06b1323",
+              "container_label_com_docker_compose_container_number": "1",
+              "container_label_com_docker_compose_image": "sha256:f8e89f6f681538f7f50cd2b5d63c2f440fac871ba4cf7f26ef6257ed17c9e2b8",
+              "container_label_com_docker_compose_oneoff": "False",
+              "container_label_com_docker_compose_project": "ubuntu",
+              "container_label_com_docker_compose_project_config_files": "/home/ubuntu/docker-compose.yml",
+              "container_label_com_docker_compose_project_working_dir": "/home/ubuntu",
+              "container_label_com_docker_compose_service": "nginx",
+              "container_label_com_docker_compose_version": "2.31.0",
+              "container_label_description": "Static files for Ralph DCIM served by Nginx HTTP server.",
+              "container_label_maintainer": "Allegro.pl Sp. z o.o. opensource@allegro.pl",
+              "container_label_version": "20241211.1",
+              "cpu": "total",
+              "id": "/system.slice/docker-cb66fd94c6f238cfe6fc99c977c86bba8f55d906bad314f0dc8a067321313acf.scope",
+              "image": "allegro/ralph-static-nginx:latest",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor",
+              "name": "ubuntu-nginx-1"
+            },
+            "value": [
+              1733987693.84,
+              "0.831199"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "container_label_authors": "Allegro.pl Sp. z o.o. and Contributors opensource@allegro.pl",
+              "container_label_com_docker_compose_config_hash": "efd36a4dec5d78ba15ecc3bed39574e5beebf33eb407409c5dc83316f1166710",
+              "container_label_com_docker_compose_container_number": "1",
+              "container_label_com_docker_compose_image": "sha256:01d8d8392bf9eeaa1f253dbd4020b9ac0b102ab56f5ca638c0f553afc2806516",
+              "container_label_com_docker_compose_oneoff": "False",
+              "container_label_com_docker_compose_project": "ubuntu",
+              "container_label_com_docker_compose_project_config_files": "/home/ubuntu/docker-compose.yml",
+              "container_label_com_docker_compose_project_working_dir": "/home/ubuntu",
+              "container_label_com_docker_compose_service": "web",
+              "container_label_com_docker_compose_version": "2.31.0",
+              "container_label_description": "Advanced Asset Management and DCIM system for data center and back office.",
+              "container_label_maintainer": "Allegro.pl Sp. z o.o. opensource@allegro.pl",
+              "container_label_org_opencontainers_image_ref_name": "ubuntu",
+              "container_label_org_opencontainers_image_version": "18.04",
+              "container_label_version": "20241211.1",
+              "cpu": "total",
+              "id": "/system.slice/docker-a33624b38c7c478a3b9e617d863ceb8f5ad64ee09af31c76aaa2b0c0a00a4e96.scope",
+              "image": "allegro/ralph:latest",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor",
+              "name": "ubuntu-web-1"
+            },
+            "value": [
+              1733987693.84,
+              "55.710976"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "container_label_authors": "Allegro.pl Sp. z o.o. and Contributors opensource@allegro.pl",
+              "container_label_com_docker_compose_config_hash": "efd36a4dec5d78ba15ecc3bed39574e5beebf33eb407409c5dc83316f1166710",
+              "container_label_com_docker_compose_container_number": "1",
+              "container_label_com_docker_compose_image": "sha256:01d8d8392bf9eeaa1f253dbd4020b9ac0b102ab56f5ca638c0f553afc2806516",
+              "container_label_com_docker_compose_oneoff": "False",
+              "container_label_com_docker_compose_project": "ubuntu",
+              "container_label_com_docker_compose_project_config_files": "/home/ubuntu/docker-compose.yml",
+              "container_label_com_docker_compose_project_working_dir": "/home/ubuntu",
+              "container_label_com_docker_compose_service": "web",
+              "container_label_com_docker_compose_version": "2.31.0",
+              "container_label_description": "Advanced Asset Management and DCIM system for data center and back office.",
+              "container_label_maintainer": "Allegro.pl Sp. z o.o. opensource@allegro.pl",
+              "container_label_org_opencontainers_image_ref_name": "ubuntu",
+              "container_label_org_opencontainers_image_version": "18.04",
+              "container_label_version": "20241211.1",
+              "cpu": "total",
+              "id": "/system.slice/docker-f50fa10041130d6a3ec2b1557bd99534c0d050d9d884376a18e70886c6328ae7.scope",
+              "image": "allegro/ralph:latest",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor",
+              "name": "ubuntu-web-1"
+            },
+            "value": [
+              1733987693.84,
+              "119.299311"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "container_label_com_docker_compose_config_hash": "32faa895ec4488b46cd9a67a6c7b93e43872f511878c82e83d25fdbaff4eae99",
+              "container_label_com_docker_compose_container_number": "1",
+              "container_label_com_docker_compose_image": "sha256:c02cf39d3dba9fcf5531f23358e33377e50fcc6065d97a27e68a4242229c67a0",
+              "container_label_com_docker_compose_oneoff": "False",
+              "container_label_com_docker_compose_project": "ubuntu",
+              "container_label_com_docker_compose_project_config_files": "/home/ubuntu/docker-compose.yml",
+              "container_label_com_docker_compose_project_working_dir": "/home/ubuntu",
+              "container_label_com_docker_compose_service": "cadvisor",
+              "container_label_com_docker_compose_version": "2.31.0",
+              "cpu": "total",
+              "id": "/system.slice/docker-438ffa29dd3ae45a7a14e91ca526b7bf0dd478634b4c0bf8f41614e6bf2b2dde.scope",
+              "image": "gcr.io/cadvisor/cadvisor:latest",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor",
+              "name": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "193.929682"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "container_label_com_docker_compose_config_hash": "32faa895ec4488b46cd9a67a6c7b93e43872f511878c82e83d25fdbaff4eae99",
+              "container_label_com_docker_compose_container_number": "1",
+              "container_label_com_docker_compose_image": "sha256:c02cf39d3dba9fcf5531f23358e33377e50fcc6065d97a27e68a4242229c67a0",
+              "container_label_com_docker_compose_oneoff": "False",
+              "container_label_com_docker_compose_project": "ubuntu",
+              "container_label_com_docker_compose_project_config_files": "/home/ubuntu/docker-compose.yml",
+              "container_label_com_docker_compose_project_working_dir": "/home/ubuntu",
+              "container_label_com_docker_compose_service": "cadvisor",
+              "container_label_com_docker_compose_version": "2.31.0",
+              "cpu": "total",
+              "id": "/system.slice/docker-d512f26b55b1742ca336975208dee25eccb380b8869df4d4064333d181fdfb90.scope",
+              "image": "gcr.io/cadvisor/cadvisor:latest",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor",
+              "name": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "208.436102"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "755.587334"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/init.scope",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "7.551232"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "664.834942"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/ModemManager.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.129458"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/acpid.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.017064"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/chrony.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.492222"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/cloud-final.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "47.684112"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/cloud-init.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "1.236602"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/containerd.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "48.731708"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/cron.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.621579"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/dbus.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "1.279856"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/docker.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "52.747049"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/docker.socket",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.000848"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/fwupd.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.5648"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/irqbalance.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.078515"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/lxd-installer.socket",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.001384"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/multipathd.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.23039"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/networkd-dispatcher.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.364301"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/node_exporter.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "50.562657"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/polkit.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.081613"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/rsyslog.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.358305"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/snap.amazon-ssm-agent.amazon-ssm-agent.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "1.594685"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/snapd.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "2.684794"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/snapd.socket",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.000274"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/ssh.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.196715"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/ssh.socket",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.001101"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/system-getty.slice",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.016065"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/system-getty.slice/getty@tty1.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.016065"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/system-modprobe.slice",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.060981"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/system-serial\\x2dgetty.slice",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.007304"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/system-serial\\x2dgetty.slice/serial-getty@ttyS0.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.007304"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/system-systemd\\x2dfsck.slice",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.051588"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/systemd-journald.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.956919"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/systemd-logind.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.311335"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/systemd-networkd.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.104438"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/systemd-resolved.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "1.909536"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/systemd-udevd.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "2.198813"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/systemd-udevd.service/udev",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "1.958386"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/udisks2.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.188303"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/system.slice/unattended-upgrades.service",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "0.135727"
+            ]
+          },
+          {
+            "metric": {
+              "__name__": "container_cpu_usage_seconds_total",
+              "cpu": "total",
+              "id": "/user.slice",
+              "instance": "app-alb-1651614373.us-east-1.elb.amazonaws.com:8080",
+              "job": "cadvisor"
+            },
+            "value": [
+              1733987693.84,
+              "8.857852"
+            ]
+          }
+        ]
+      }
+    },
+    "anomaly_scores": {
+      "status": "success",
+      "data": {
+        "resultType": "vector",
+        "result": []
+      }
+    }
+  }
+}

@@ -1,0 +1,100 @@
+groups:
+  - name: instance_down
+    rules:
+      - alert: InstanceDown
+        expr: up == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Instance {{ $labels.instance }} down"
+          description: "Prometheus target instance {{ $labels.instance }} has been down for more than 5 minutes."
+
+  - name: anomaly_alerts
+    rules:
+      - alert: HighAnomalyDetected
+        expr: anomaly_score > 0.5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High anomaly score detected"
+          description: "The ML-based anomaly detection indicates unusual behavior."
+      
+      - alert: HighCPUUsageRalph
+        expr: rate(container_cpu_usage_seconds_total{container_name="ralph"}[5m]) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU Usage in Ralph Container"
+          description: "Ralph container CPU usage has been >80% for more than 5 minutes."
+
+  - name: resource_usage
+    rules:
+      - alert: HighMemoryUsage
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes > 0.8
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High Memory Usage"
+          description: "Memory usage on instance {{ $labels.instance }} is above 80%."
+
+      - alert: DiskIOWriteHigh
+        expr: rate(node_disk_written_bytes_total[5m]) > 1e+06
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Disk IO Writes"
+          description: "Disk IO writes for instance {{ $labels.instance }} exceeded 1MB/s over 5 minutes."
+
+      - alert: DiskIOReadHigh
+        expr: rate(node_disk_read_bytes_total[5m]) > 1e+06
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Disk IO Reads"
+          description: "Disk IO reads for instance {{ $labels.instance }} exceeded 1MB/s over 5 minutes."
+
+      - alert: HighNetworkTraffic
+        expr: rate(node_network_receive_bytes_total[5m]) + rate(node_network_transmit_bytes_total[5m]) > 1e+07
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Network Traffic"
+          description: "Network traffic on instance {{ $labels.instance }} exceeded 10MB/s over 5 minutes."
+
+  - name: application_health
+    rules:
+      - alert: ProcessHighCPU
+        expr: rate(process_cpu_seconds_total[5m]) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Process CPU Usage"
+          description: "A process on instance {{ $labels.instance }} has exceeded 80% CPU usage."
+
+      - alert: ProcessMemoryHigh
+        expr: process_resident_memory_bytes > 1e+09
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High Process Memory Usage"
+          description: "A process on instance {{ $labels.instance }} is consuming more than 1GB of memory."
+
+  # - name: test_alerts
+  #   rules:
+  #     - alert: TestAlert
+  #       expr: vector(1)
+  #       for: 1m
+  #       labels:
+  #         severity: critical
+  #       annotations:
+  #         summary: "Test Alert"
+  #         description: "This is a test alert to verify Alertmanager Slack integration."

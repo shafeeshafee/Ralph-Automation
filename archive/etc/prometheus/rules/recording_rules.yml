@@ -1,0 +1,15 @@
+# /etc/prometheus/rules/recording_rules.yml
+groups:
+  - name: recording_rules
+    rules:
+    - record: job:node_cpu_usage:rate5m
+      expr: rate(node_cpu_seconds_total{mode!="idle"}[5m])
+
+    - record: job:node_memory_usage:percentage
+      expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100
+
+    - record: job:ralph_response_time:avg5m
+      expr: rate(ralph_http_request_duration_seconds_sum[5m]) / rate(ralph_http_request_duration_seconds_count[5m])
+
+    - record: job:ml_prediction_accuracy:avg1h
+      expr: 1 - (abs(ml_forecast_value - actual_value) / actual_value)

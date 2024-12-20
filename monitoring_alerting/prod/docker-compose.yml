@@ -1,0 +1,257 @@
+services:
+  prometheus:
+    image: prom/prometheus:v2.49.0
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/alerting_rules.yml:/etc/prometheus/alerting_rules.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.retention.time=15d'
+      - '--web.enable-lifecycle'
+    ports:
+      - "9090:9090"
+    networks:
+      - monitoring
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--tries=1", "http://localhost:9090/-/healthy", "-O", "/dev/null"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  alertmanager:
+    image: prom/alertmanager:v0.26.0
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+    ports:
+      - "9093:9093"
+    networks:
+      - monitoring
+    depends_on:
+      - prometheus
+
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring
+    depends_on:
+      - prometheus
+
+  node_exporter:
+    image: prom/node-exporter:v1.6.0
+    command:
+      - '--path.rootfs=/host'
+      - '--web.listen-address=:9100'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - /:/host:ro,rslave
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    ports:
+      - "8080:8080"
+    networks:
+      - monitoring
+    restart: unless-stopped
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+
+
+  host_node_exporter:
+    image: prom/node-exporter:v1.6.0
+    command:
+      - '--path.rootfs=/host'
+      - '--web.listen-address=:9101'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - /:/host:ro,rslave
+
+  host_cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    ports:
+      - "8082:8080"
+    networks:
+      - monitoring
+    restart: unless-stopped
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+
+  pushgateway:
+    image: prom/pushgateway:latest
+    ports:
+      - "9091:9091"
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  machine_learning:
+    image: cgordondev/machine_learning:latest
+    environment:
+      - PROMETHEUS_URL=http://prometheus:9090
+      - PUSHGATEWAY_URL=http://pushgateway:9091
+      - FORECAST_LOOKBACK=86400
+      - FORECAST_STEP=60s
+      - FORECAST_HORIZON=60
+      - ANOMALY_CONTAMINATION=0.01
+      - ANOMALY_LOOKBACK=3600
+    networks:
+      - monitoring
+    depends_on:
+      - prometheus
+      - pushgateway
+    restart: unless-stopped
+
+  log-analytics-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        AGENT_NAME: log-analytics
+    volumes:
+      - ./agent/logs:/app/logs:rw
+      - ./agent/reports:/app/reports:rw
+    networks:
+      - monitoring
+    environment:
+      - PROMETHEUS_URL=http://prometheus:9090
+      - REPORTS_DIR=/app/reports
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  monitoring-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        AGENT_NAME: monitoring
+    volumes:
+      - ./agent/reports:/app/reports:rw
+    environment:
+      - PROMETHEUS_URL=http://prometheus:9090
+      - REPORTS_DIR=/app/reports
+    networks:
+      - monitoring
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  reporting-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        AGENT_NAME: reporting
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION}
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME}
+      - REPORTS_DIR=/app/reports
+    volumes:
+      - ./agent/reports:/app/reports:rw
+    networks:
+      - monitoring
+    depends_on:
+      - log-analytics-agent
+      - monitoring-agent
+    restart: unless-stopped
+
+  analytics-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        AGENT_NAME: analytics
+    volumes:
+      - ./agent/scripts:/app/scripts:rw
+      - ./agent/reports:/app/reports:rw
+      - ./agent/logs:/app/logs:rw  # Add this line to mount logs directory
+    networks:
+      - monitoring
+    user: "${UID:-1000}:${GID:-1000}"
+    environment:
+      - PROMETHEUS_URL=http://prometheus:9090
+      - REPORTS_DIR=/app/reports
+    env_file:
+      - .env
+    depends_on:
+      - prometheus
+      - log-analytics-agent
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /app/scripts/analyze_findings.sh && echo OK || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  workflow-coordinator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        AGENT_NAME: coordinator
+    volumes:
+      - ./agent/reports:/app/reports:rw
+      - ./agent/logs:/app/logs:rw
+      - ./shared:/agent/shared:ro
+    networks:
+      - monitoring
+    environment:
+      - PYTHONPATH=/agent
+      - LOG_LEVEL=INFO
+      - PROMETHEUS_URL=http://prometheus:9090
+      - PUSHGATEWAY_URL=http://pushgateway:9091
+      - REPORTS_DIR=/app/reports
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION}
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME}
+    depends_on:
+      - prometheus
+      - pushgateway
+      - log-analytics-agent
+      - monitoring-agent
+      - analytics-agent
+      - reporting-agent
+    restart: unless-stopped
+
+networks:
+  monitoring:
+    driver: bridge
+
+volumes:
+  grafana-storage:
+  prometheus_data:

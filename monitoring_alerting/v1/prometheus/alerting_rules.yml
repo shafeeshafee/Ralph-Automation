@@ -1,0 +1,31 @@
+groups:
+  - name: instance_down
+    rules:
+      - alert: InstanceDown
+        expr: up == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Instance {{ $labels.instance }} down"
+          description: "Prometheus target instance {{ $labels.instance }} has been down for more than 5 minutes."
+
+  - name: anomaly_alerts
+    rules:
+      - alert: HighAnomalyDetected
+        expr: anomaly_score > 0.5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High anomaly score detected"
+          description: "The ML-based anomaly detection indicates unusual behavior."
+      
+      - alert: HighCPUUsageRalph
+        expr: rate(container_cpu_usage_seconds_total{container_name="ralph"}[5m]) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU Usage in Ralph Container"
+          description: "Ralph container CPU usage has been >80% for more than 5 minutes."    

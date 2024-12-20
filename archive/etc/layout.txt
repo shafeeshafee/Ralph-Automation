@@ -1,0 +1,4 @@
+/etc/prometheus/prometheus.yml
+/etc/prometheus/rules/*
+/etc/grafana/*
+/etc/nginx/conf.d/monitoring.conf
